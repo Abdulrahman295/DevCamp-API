@@ -2,16 +2,12 @@ import mongoose from "mongoose";
 
 export const createConnection = () => {
   return mongoose
-    .connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    .connect(process.env.MONGO_URI)
     .then(() => {
       console.log("Database connected");
-      return 0;
     })
     .catch((err) => {
-      console.log(err);
-      return 1;
+      console.log(`Error: ${err.message}`);
+      process.exit(1);
     });
 };

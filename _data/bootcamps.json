@@ -1,0 +1,31 @@
+[
+  {
+    "_id": "65dec74623416fad1b104f12",
+    "name": "Devworks Bootcamp",
+    "description": "Devworks is a full stack JavaScript Bootcamp located in the heart of Boston that focuses on the technologies you need to get a high paying job as a web developer",
+    "careers": ["Web Development", "UI/UX", "Business"]
+  },
+  {
+    "_id": "65dec74623416fad1b104f13",
+    "name": "ModernTech Bootcamp",
+    "description": "ModernTech has one goal, and that is to make you a rockstar developer and/or designer with a six figure salary. We teach both development and UI/UX",
+    "careers": ["Web Development", "UI/UX", "Mobile Development"]
+  },
+  {
+    "_id": "65dec74623416fad1b104f14",
+    "name": "Codemasters",
+    "description": "Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in full stack web development and data science",
+    "careers": ["Web Development", "Data Science", "Business"]
+  },
+  {
+    "_id": "65dec74623416fad1b104f11",
+    "name": "Devcentral Bootcamp",
+    "description": "Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in front end and full stack web development",
+    "careers": [
+      "Mobile Development",
+      "Web Development",
+      "Data Science",
+      "Business"
+    ]
+  }
+]
