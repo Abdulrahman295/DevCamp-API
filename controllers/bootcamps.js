@@ -46,6 +46,8 @@ const getBootcamp = (req, res, next) => {
 };
 
 const createBootcamp = (req, res, next) => {
+  req.body.user = req.user.id;
+
   Bootcamp.create(req.body)
     .then((bootcamp) => {
       res
@@ -58,14 +60,30 @@ const createBootcamp = (req, res, next) => {
 };
 
 const updateBootcamp = (req, res, next) => {
-  Bootcamp.findByIdAndUpdate(req.params.id, req.body)
+  Bootcamp.findById(req.params.id)
     .then((bootcamp) => {
       if (!bootcamp) {
         return res
           .status(400)
           .json({ success: false, msg: "bootcamp doesn't exist" });
       }
-      res.status(200).json({ success: true, data: bootcamp });
+
+      if (
+        bootcamp.user.toString() !== req.user.id &&
+        req.user.role !== "admin"
+      ) {
+        return res.status(401).json({
+          success: false,
+          msg: `User ${req.user.id} is authorized to update bootcamp ${bootcamp._id}`,
+        });
+      }
+
+      return Bootcamp.findByIdAndUpdate(req.params.id, req.body);
+    })
+    .then((bootcamp) => {
+      res
+        .status(200)
+        .json({ success: true, data: bootcamp, msg: "bootcamp updated!" });
     })
     .catch((err) => {
       next(err);
@@ -73,14 +91,30 @@ const updateBootcamp = (req, res, next) => {
 };
 
 const deleteBootcamp = (req, res, next) => {
-  Bootcamp.findByIdAndDelete(req.params.id)
+  Bootcamp.findById(req.params.id)
     .then((bootcamp) => {
       if (!bootcamp) {
         return res
           .status(400)
           .json({ success: false, msg: "bootcamp doesn't exist" });
       }
-      res.status(200).json({ success: true, data: {} });
+
+      if (
+        bootcamp.user.toString() !== req.user.id &&
+        req.user.role !== "admin"
+      ) {
+        return res.status(401).json({
+          success: false,
+          msg: `User ${req.user.id} is authorized to delete bootcamp ${bootcamp._id}`,
+        });
+      }
+
+      return Bootcamp.findByIdAndDelete(req.params.id);
+    })
+    .then(() => {
+      res
+        .status(200)
+        .json({ success: true, data: {}, msg: "bootcamp deleted!" });
     })
     .catch((err) => {
       next(err);
@@ -102,9 +136,7 @@ const uploadBootcampPhoto = (req, res, next) => {
 
   uploadedFile.name = `${req.params.id}${path.parse(uploadedFile.name).ext}`;
 
-  Bootcamp.findByIdAndUpdate(req.params.id, {
-    photo: uploadedFile.name,
-  })
+  Bootcamp.findById(req.params.id)
     .then((bootcamp) => {
       if (!bootcamp) {
         return res
@@ -112,6 +144,21 @@ const uploadBootcampPhoto = (req, res, next) => {
           .json({ success: false, msg: "bootcamp doesn't exist" });
       }
 
+      if (
+        bootcamp.user.toString() !== req.user.id &&
+        req.user.role !== "admin"
+      ) {
+        return res.status(401).json({
+          success: false,
+          msg: `User ${req.user.id} is authorized to upload photo of bootcamp ${bootcamp._id}`,
+        });
+      }
+
+      return Bootcamp.findByIdAndUpdate(req.params.id, {
+        photo: uploadedFile.name,
+      });
+    })
+    .then(() => {
       return uploadedFile.mv(
         `${process.env.FILE_UPLOAD_PATH}/${uploadedFile.name}`
       );

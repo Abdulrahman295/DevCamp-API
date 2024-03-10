@@ -30,6 +30,11 @@ const CourseSchema = new Schema({
     ref: "Bootcamp",
     required: true,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 CourseSchema.statics.getAverageCost = function (targetId) {
@@ -48,9 +53,6 @@ CourseSchema.statics.getAverageCost = function (targetId) {
       return Bootcamp.findByIdAndUpdate(targetId, {
         averageCost: Math.ceil(result[0].averageCost / 10) * 10,
       });
-    })
-    .then((result) => {
-      console.log(result);
     })
     .catch((err) => {
       console.log(`Error: ${err.message}`);
