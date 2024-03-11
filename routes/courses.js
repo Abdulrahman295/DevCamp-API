@@ -13,12 +13,12 @@ const router = Router({ mergeParams: true });
 router
   .route("/")
   .get(getCourses)
-  .post(verifyToken, checkUserRole, createCourse);
+  .post(verifyToken, checkUserRole("publisher", "admin"), createCourse);
 
 router
   .route("/:id")
   .get(getCourse)
-  .put(verifyToken, checkUserRole, updateCourse)
-  .delete(verifyToken, checkUserRole, deleteCourse);
+  .put(verifyToken, checkUserRole("publisher", "admin"), updateCourse)
+  .delete(verifyToken, checkUserRole("publisher", "admin"), deleteCourse);
 
 export default router;

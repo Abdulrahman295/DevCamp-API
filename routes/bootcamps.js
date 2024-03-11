@@ -17,14 +17,16 @@ router.use("/:bootcampId/courses", courseRouter);
 router
   .route("/")
   .get(getBootcamps)
-  .post(verifyToken, checkUserRole, createBootcamp);
+  .post(verifyToken, checkUserRole("publisher", "admin"), createBootcamp);
 
-router.route("/:id/photo").put(verifyToken, checkUserRole, uploadBootcampPhoto);
+router
+  .route("/:id/photo")
+  .put(verifyToken, checkUserRole("publisher", "admin"), uploadBootcampPhoto);
 
 router
   .route("/:id")
   .get(getBootcamp)
-  .put(verifyToken, checkUserRole, updateBootcamp)
-  .delete(verifyToken, checkUserRole, deleteBootcamp);
+  .put(verifyToken, checkUserRole("publisher", "admin"), updateBootcamp)
+  .delete(verifyToken, checkUserRole("publisher", "admin"), deleteBootcamp);
 
 export default router;

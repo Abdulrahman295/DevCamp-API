@@ -44,13 +44,16 @@ export const verifyToken = (req, res, next) => {
     });
 };
 
-export const checkUserRole = (req, res, next) => {
-  console.log(req.user);
-  if (!["admin", "publisher"].includes(req.user.role)) {
-    const err = new Error("User role not authorized to access this route");
-    err.statusCode = 403;
-    return next(err);
-  }
-
-  next();
+export const checkUserRole = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorResponse(
+          `User role ${req.user.role} is not authorized to access this route`,
+          403
+        )
+      );
+    }
+    next();
+  };
 };
