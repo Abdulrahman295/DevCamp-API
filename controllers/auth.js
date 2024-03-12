@@ -42,6 +42,14 @@ export const login = (req, res, next) => {
     });
 };
 
+export const logout = (req, res, next) => {
+  res.cookie("token", "none", {
+    expires: new Date(Date.now() + 10 * 1000),
+  });
+
+  res.status(200).json({ success: true, msg: "Logged out successfully" });
+};
+
 export const getCurrentUser = (req, res, next) => {
   User.findById(req.user.id)
     .then((user) => {
