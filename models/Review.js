@@ -1,30 +1,25 @@
+import e from "express";
 import mongoose from "mongoose";
 import Bootcamp from "./Bootcamp.js";
+
 const { Schema } = mongoose;
 
-const CourseSchema = new Schema({
-  name: {
+const ReviewSchema = new Schema({
+  title: {
     type: String,
     required: true,
     maxlength: 50,
   },
-  description: {
+  text: {
     type: String,
     required: true,
     maxlength: 500,
   },
-  weeks: {
+  rating: {
     type: Number,
+    min: 1,
+    max: 10,
     required: true,
-  },
-  cost: {
-    type: Number,
-    required: true,
-  },
-  level: {
-    type: String,
-    required: true,
-    enum: ["beginner", "intermediate", "advanced"],
   },
   bootcamp: {
     type: mongoose.Schema.ObjectId,
@@ -42,7 +37,7 @@ const CourseSchema = new Schema({
   },
 });
 
-CourseSchema.statics.getAverageCost = function (targetId) {
+ReviewSchema.statics.getAverageRating = function (targetId) {
   return this.aggregate([
     {
       $match: { bootcamp: targetId },
@@ -50,13 +45,13 @@ CourseSchema.statics.getAverageCost = function (targetId) {
     {
       $group: {
         _id: "$bootcamp",
-        averageCost: { $avg: "$cost" },
+        averageRating: { $avg: "$rating" },
       },
     },
   ])
     .then((result) => {
       return Bootcamp.findByIdAndUpdate(targetId, {
-        averageCost: Math.ceil(result[0].averageCost / 10) * 10,
+        averageRating: result[0].averageRating.toFixed(1),
       });
     })
     .catch((err) => {
@@ -64,12 +59,12 @@ CourseSchema.statics.getAverageCost = function (targetId) {
     });
 };
 
-CourseSchema.post("save", function () {
-  this.constructor.getAverageCost(this.bootcamp);
+ReviewSchema.post("save", function () {
+  this.constructor.getAverageRating(this.bootcamp);
 });
 
-CourseSchema.pre("remove", function () {
-  this.constructor.getAverageCost(this.bootcamp);
+ReviewSchema.pre("remove", function () {
+  this.constructor.getAverageRating(this.bootcamp);
 });
 
-export default mongoose.model("Course", CourseSchema);
+export default mongoose.model("Review", ReviewSchema);

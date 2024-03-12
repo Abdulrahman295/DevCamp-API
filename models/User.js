@@ -26,6 +26,10 @@ const UserSchema = new Schema({
     minlength: 6,
     select: false,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });

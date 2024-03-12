@@ -8,6 +8,8 @@ import { config } from "dotenv";
 import bootcampsRouter from "./routes/bootcamps.js";
 import coursesRouter from "./routes/courses.js";
 import authRouter from "./routes/auth.js";
+import usersRouter from "./routes/users.js";
+import reviewsRouter from "./routes/reviews.js";
 import { createConnection } from "./config/db.js";
 import { errorHandler } from "./middleware/error.js";
 
@@ -32,5 +34,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/bootcamps", bootcampsRouter);
 app.use("/courses", coursesRouter);
 app.use("/auth", authRouter);
-
+app.use("/users", usersRouter);
+app.use("/reviews", reviewsRouter);
 app.use(errorHandler);

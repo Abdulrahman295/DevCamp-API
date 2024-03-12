@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import Bootcamp from "./models/Bootcamp.js";
 import Course from "./models/Course.js";
 import User from "./models/User.js";
+import Review from "./models/Review.js";
 import { createConnection } from "./config/db.js";
 
 config({ path: "./config/config.env" });
@@ -17,6 +18,8 @@ const courses = JSON.parse(fs.readFileSync("./_data/courses.json", "utf-8"));
 
 const users = JSON.parse(fs.readFileSync("./_data/users.json", "utf-8"));
 
+const reviews = JSON.parse(fs.readFileSync("./_data/reviews.json", "utf-8"));
+
 const loadData = () => {
   User.create(users)
     .then(() => {
@@ -29,6 +32,10 @@ const loadData = () => {
     })
     .then(() => {
       console.log("courses loaded successfully!");
+      return Review.create(reviews);
+    })
+    .then(() => {
+      console.log("reviews loaded successfully!");
     })
     .catch((err) => {
       console.log(`Error: ${err.message}`);
@@ -47,6 +54,10 @@ const deleteData = () => {
     })
     .then(() => {
       console.log("courses deleted successfully!");
+      return Review.deleteMany();
+    })
+    .then(() => {
+      console.log("reviews deleted successfully!");
     })
     .catch((err) => {
       console.log(`Error: ${err.message}`);

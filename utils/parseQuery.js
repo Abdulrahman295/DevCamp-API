@@ -1,6 +1,6 @@
 export const parseQuery = (query) => {
   let fields = [];
-  let sortBy = "name";
+  let sortBy = "createdAt";
   let page = parseInt(query.page, 10) || 1;
   let limit = parseInt(query.limit, 10) || 10;
   let startIndex = (page - 1) * limit;

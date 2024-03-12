@@ -72,9 +72,7 @@ const deleteUser = (req, res, next) => {
           .status(400)
           .json({ success: false, msg: "user doesn't exist" });
       }
-      res
-        .status(200)
-        .json({ success: true, msg: "user deleted!!", data: user });
+      res.status(200).json({ success: true, msg: "user deleted!!", data: {} });
     })
     .catch((err) => {
       next(err);
